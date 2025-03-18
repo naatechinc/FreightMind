@@ -157,8 +157,8 @@
         }
         
         .box-image {
-            width: 100px;
-            height: 100px;
+            width: 150px;
+            height: 150px;
             margin: 0 auto;
         }
 
@@ -349,7 +349,44 @@
             
             <section class="section right-section">
                 <div class="box-preview">
-                    <img src="/api/placeholder/100/100" alt="Box placeholder" class="box-image">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" class="box-image">
+                      <!-- Base box - bottom face -->
+                      <polygon points="40,140 160,140 160,180 40,180" fill="#e8c088" stroke="#333" stroke-width="2"/>
+                      
+                      <!-- Box left side -->
+                      <polygon points="40,80 40,180 20,160 20,60" fill="#d4a76a" stroke="#333" stroke-width="2"/>
+                      
+                      <!-- Box right side -->
+                      <polygon points="160,80 160,180 180,160 180,60" fill="#d4a76a" stroke="#333" stroke-width="2"/>
+                      
+                      <!-- Box top - open flaps -->
+                      <polygon points="40,80 20,60 100,40 180,60 160,80" fill="#e8c088" stroke="#333" stroke-width="2"/>
+                      
+                      <!-- Parts inside box -->
+                      <rect x="60" y="100" width="30" height="30" rx="2" fill="#4a86e8" stroke="#333" stroke-width="1"/>
+                      <circle cx="115" cy="115" r="15" fill="#34a853" stroke="#333" stroke-width="1"/>
+                      <polygon points="75,80 105,65 135,80 120,105 90,105" fill="#ff8c00" stroke="#333" stroke-width="1"/>
+                      
+                      <!-- AI element - scanning beam -->
+                      <path d="M100,20 L130,140" stroke="#ff8c00" stroke-width="2" stroke-dasharray="5,3" opacity="0.7"/>
+                      <path d="M70,20 L100,140" stroke="#4a86e8" stroke-width="2" stroke-dasharray="5,3" opacity="0.7"/>
+                      
+                      <!-- AI scanning device on top -->
+                      <rect x="65" y="10" width="70" height="20" rx="5" fill="#333" stroke="#333" stroke-width="1"/>
+                      <circle cx="100" cy="20" r="8" fill="#ff8c00" stroke="#555" stroke-width="1"/>
+                      <circle cx="100" cy="20" r="3" fill="#fff"/>
+                      
+                      <!-- Optimization illustrated with small arrows pointing to arrangement -->
+                      <path d="M50,50 L65,70" stroke="#34a853" stroke-width="2" marker-end="url(#arrow)" stroke-linecap="round"/>
+                      <path d="M150,50 L135,70" stroke="#34a853" stroke-width="2" marker-end="url(#arrow)" stroke-linecap="round"/>
+                      
+                      <!-- Arrow marker definition -->
+                      <defs>
+                        <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                          <path d="M 0 0 L 10 5 L 0 10 z" fill="#34a853"/>
+                        </marker>
+                      </defs>
+                    </svg>
                 </div>
                 <h2>Ready to Optimize Your Packaging</h2>
                 <p>Capture a photo of your parts or upload DXF files to get started with AI-powered packaging optimization.</p>
