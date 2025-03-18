@@ -208,6 +208,14 @@
             background-color: rgba(255, 140, 0, 0.1);
         }
         
+        .photo-drop-area {
+            border-color: var(--secondary-color);
+        }
+        
+        .photo-drop-area.highlight {
+            background-color: rgba(74, 134, 232, 0.1);
+        }
+        
         .file-info {
             margin-top: 10px;
             font-size: 0.9rem;
@@ -221,55 +229,85 @@
             const fileInput = document.getElementById('dxf-file-input');
             const fileInfo = document.getElementById('file-info');
             
-            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-                dropArea.addEventListener(eventName, preventDefaults, false);
-            });
+            // Photo capture functionality
+            const photoDropArea = document.getElementById('photo-drop-area');
+            const photoInput = document.getElementById('camera-input');
+            const photoInfo = document.getElementById('photo-info');
             
+            // Helper functions for drag and drop
             function preventDefaults(e) {
                 e.preventDefault();
                 e.stopPropagation();
             }
             
-            ['dragenter', 'dragover'].forEach(eventName => {
-                dropArea.addEventListener(eventName, highlight, false);
-            });
-            
-            ['dragleave', 'drop'].forEach(eventName => {
-                dropArea.addEventListener(eventName, unhighlight, false);
-            });
-            
-            function highlight() {
-                dropArea.classList.add('highlight');
+            function setupDropArea(area, input, infoEl) {
+                ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                    area.addEventListener(eventName, preventDefaults, false);
+                });
+                
+                ['dragenter', 'dragover'].forEach(eventName => {
+                    area.addEventListener(eventName, () => area.classList.add('highlight'), false);
+                });
+                
+                ['dragleave', 'drop'].forEach(eventName => {
+                    area.addEventListener(eventName, () => area.classList.remove('highlight'), false);
+                });
+                
+                area.addEventListener('drop', function(e) {
+                    const dt = e.dataTransfer;
+                    const files = dt.files;
+                    handleFiles(files, infoEl);
+                    
+                    // Update the file input to match the dropped files
+                    if (files.length > 0) {
+                        // Create a new DataTransfer object
+                        const dataTransfer = new DataTransfer();
+                        
+                        // Add all dropped files to the DataTransfer object
+                        for (let i = 0; i < files.length; i++) {
+                            // Only add files that match the input's accept attribute
+                            if (input.accept.includes(files[i].type.split('/')[0]) || 
+                                input.accept.includes(files[i].type) ||
+                                input.accept === '*') {
+                                dataTransfer.items.add(files[i]);
+                            }
+                        }
+                        
+                        // Assign the DataTransfer files to the input
+                        input.files = dataTransfer.files;
+                        
+                        // Dispatch a change event
+                        const event = new Event('change', { bubbles: true });
+                        input.dispatchEvent(event);
+                    }
+                });
+                
+                input.addEventListener('change', function() {
+                    handleFiles(this.files, infoEl);
+                });
+                
+                // Clicking anywhere in the drop area triggers the file input
+                area.addEventListener('click', function(e) {
+                    // Prevent click on label from triggering twice
+                    if (e.target.tagName.toLowerCase() !== 'label') {
+                        input.click();
+                    }
+                });
             }
             
-            function unhighlight() {
-                dropArea.classList.remove('highlight');
-            }
-            
-            dropArea.addEventListener('drop', handleDrop, false);
-            
-            function handleDrop(e) {
-                const dt = e.dataTransfer;
-                const files = dt.files;
-                handleFiles(files);
-            }
-            
-            fileInput.addEventListener('change', function() {
-                handleFiles(this.files);
-            });
-            
-            function handleFiles(files) {
+            function handleFiles(files, infoEl) {
                 if (files.length > 0) {
                     const fileNames = Array.from(files).map(file => file.name).join(', ');
-                    fileInfo.textContent = `Selected: ${fileNames}`;
+                    infoEl.textContent = `Selected: ${fileNames}`;
                     // Here you can add code to process the files
                 }
             }
             
-            // Clicking anywhere in the drop area triggers the file input
-            dropArea.addEventListener('click', function() {
-                fileInput.click();
-            });
+            // Setup DXF drop area
+            setupDropArea(dropArea, fileInput, fileInfo);
+            
+            // Setup Photo drop area
+            setupDropArea(photoDropArea, photoInput, photoInfo);
         });
     </script>
 </head>
@@ -301,9 +339,11 @@
                 </h2>
                 <p class="section-description">Take a photo to detect parts automatically</p>
                 
-                <div style="text-align: center;">
+                <div class="drop-area photo-drop-area" id="photo-drop-area">
+                    <p>Drag & drop image here or</p>
                     <label for="camera-input" class="button button-secondary">Capture Photo</label>
                     <input type="file" id="camera-input" accept="image/*" capture="environment" style="display: none;">
+                    <p class="file-info" id="photo-info"></p>
                 </div>
             </section>
             
