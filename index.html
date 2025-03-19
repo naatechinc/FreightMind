@@ -7,9 +7,6 @@
     <meta name="keywords" content="packaging, optimization, AI, shipping, DXF, computer vision">
     <title>AI Packaging Optimizer</title>
     
-    <!-- Favicon -->
-    <link rel="icon" href="assets/img/favicon.ico">
-    
     <!-- TailwindCSS CDN -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     
@@ -100,6 +97,17 @@
             100% { transform: rotate(360deg); }
         }
         
+        .icon-container {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #3b82f6;
+        }
+        
         .hidden {
             display: none;
         }
@@ -125,12 +133,10 @@
                 
                 <div class="upload-zone mb-4" id="uploadZone">
                     <input type="file" id="dxfFileInput" accept=".dxf" multiple class="hidden">
-                    <div class="mb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                        </svg>
+                    <div class="icon-container mb-4">
+                        <span class="text-4xl">📤</span>
                     </div>
-                    <p class="text-sm text-gray-500 mb-2">Drag and drop DXF files here or click to browse</p>
+                    <p class="text-sm text-gray-500 mb-2">Drag and drop DXF files here</p>
                     <p class="text-xs text-gray-400">Files will be processed via Make.com integration</p>
                 </div>
                 
@@ -158,7 +164,9 @@
                 <p class="text-gray-600 mb-4">Take a photo to detect parts automatically</p>
                 
                 <div class="flex justify-center mb-4">
-                    <img src="assets/img/camera-placeholder.png" alt="Camera" class="w-full max-w-xs rounded-lg">
+                    <div class="bg-gray-100 rounded-lg w-full h-40 flex items-center justify-center">
+                        <span class="text-5xl">📷</span>
+                    </div>
                 </div>
                 
                 <button id="captureBtn" class="btn-primary w-full">Capture Photo</button>
@@ -167,7 +175,9 @@
             <!-- Ready to Optimize Card -->
             <div class="card">
                 <div class="text-center">
-                    <img src="assets/img/box-placeholder.png" alt="Box placeholder" class="w-32 h-32 mx-auto mb-4">
+                    <div class="icon-container mb-4">
+                        <span class="text-5xl">📊</span>
+                    </div>
                     
                     <h2 class="text-xl font-semibold text-gray-800 mb-2">Ready to Optimize Your Packaging</h2>
                     
@@ -218,7 +228,6 @@
     </footer>
     
     <!-- JavaScript Files -->
-    <script src="dxf-parser.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Get elements
@@ -265,6 +274,34 @@
                 });
             }
             
+            // Make the notification function globally available
+            window.showNotification = function(message, type = 'info') {
+                const notification = document.createElement('div');
+                notification.className = `fixed bottom-4 right-4 p-4 rounded-lg shadow-lg z-50 transition-opacity duration-500 ${
+                    type === 'success' ? 'bg-green-100 text-green-800' :
+                    type === 'error' ? 'bg-red-100 text-red-800' :
+                    'bg-blue-100 text-blue-800'
+                }`;
+                
+                notification.innerHTML = `
+                    <div class="flex items-center">
+                        <div class="mr-3 text-xl">
+                            ${type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️'}
+                        </div>
+                        <p>${message}</p>
+                    </div>
+                `;
+                
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.style.opacity = '0';
+                    setTimeout(() => {
+                        notification.remove();
+                    }, 500);
+                }, 3000);
+            };
+            
             // Handle file upload
             function handleFiles(files) {
                 // Show status and spinner
@@ -299,18 +336,20 @@
                             console.error('Error:', error);
                             uploadStatusText.textContent = 'Error processing files';
                             uploadSpinner.style.display = 'none';
+                            showNotification('Error processing files', 'error');
                         });
                 } else {
                     console.error('dxf-parser.js not loaded properly');
                     uploadStatusText.textContent = 'Error: Could not process files';
                     uploadSpinner.style.display = 'none';
+                    showNotification('Error: DXF parser not available', 'error');
                 }
             }
             
             // Capture button click (placeholder for now)
             if (captureBtn) {
                 captureBtn.addEventListener('click', function() {
-                    alert('Camera capture functionality would open here');
+                    showNotification('Camera capture feature coming soon', 'info');
                 });
             }
             
@@ -318,8 +357,7 @@
             [optimizeBtn, optimizePartsBtn].forEach(btn => {
                 if (btn) {
                     btn.addEventListener('click', function() {
-                        alert('Optimization would run here');
-                        // In a real implementation, this would show the packaging solution
+                        showNotification('Optimization in progress...', 'info');
                     });
                 }
             });
@@ -359,34 +397,9 @@
                 });
             }
         });
-        
-        // Create a global notification function
-        window.showNotification = function(message, type = 'info') {
-            const notification = document.createElement('div');
-            notification.className = `fixed bottom-4 right-4 p-4 rounded-lg shadow-lg z-50 transition-opacity duration-500 ${
-                type === 'success' ? 'bg-green-100 text-green-800' :
-                type === 'error' ? 'bg-red-100 text-red-800' :
-                'bg-blue-100 text-blue-800'
-            }`;
-            
-            notification.innerHTML = `
-                <div class="flex items-center">
-                    <div class="mr-3 text-xl">
-                        ${type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️'}
-                    </div>
-                    <p>${message}</p>
-                </div>
-            `;
-            
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.style.opacity = '0';
-                setTimeout(() => {
-                    notification.remove();
-                }, 500);
-            }, 3000);
-        };
     </script>
+    
+    <!-- Load the DXF parser with webhook integration -->
+    <script src="dxf-parser.js"></script>
 </body>
 </html>
