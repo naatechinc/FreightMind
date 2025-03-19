@@ -1,190 +1,157 @@
-:root {
-    --primary-color: #ff8c00;
-    --secondary-color: #4a86e8;
-    --accent-color: #34a853;
-    --light-bg: #f8f9fa;
-    --dark-text: #333;
-    --light-text: #fff;
-}
+/* AI Packaging Optimizer Styles */
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: var(--light-bg);
-    color: var(--dark-text);
+    background-color: #f8fafc;
 }
 
-.container {
-    width: 90%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem 0;
-}
-
-.header {
-    text-align: center;
-    margin-bottom: 3rem;
-    padding: 1rem;
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.header h1 {
-    color: var(--light-text);
-    font-size: 2.5rem;
-    margin: 0.5rem 0;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
-}
-
-.header p {
-    color: var(--light-text);
-    font-size: 1.2rem;
-    margin: 0.5rem 0;
-    opacity: 0.9;
-}
-
-.main-content {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 2rem;
-    justify-content: space-between;
-    margin-bottom: 3rem;
-}
-
-.section {
-    flex: 1;
-    min-width: 300px;
-    background-color: white;
-    border-radius: 12px;
+.gradient-header {
+    background: linear-gradient(135deg, #f97316 0%, #7e22ce 100%);
+    color: white;
     padding: 1.5rem;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    text-align: center;
-}
-
-.section-title {
-    font-size: 1.4rem;
-    color: var(--primary-color);
-    margin-top: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-}
-
-.section-description {
-    color: #666;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     margin-bottom: 1.5rem;
     text-align: center;
 }
 
-.box-icon {
-    font-size: 1.8rem;
-    color: var(--primary-color);
+.card {
+    background: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: transform 0.2s, box-shadow 0.2s;
+    overflow: hidden;
+    padding: 1.5rem;
 }
 
-.camera-icon {
-    font-size: 1.8rem;
-    color: var(--secondary-color);
+.card:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
-.button {
-    display: inline-block;
-    padding: 0.8rem 1.5rem;
-    background-color: white;
-    color: var(--primary-color);
-    border: 2px solid var(--primary-color);
-    border-radius: 6px;
-    font-weight: bold;
-    text-decoration: none;
-    margin: 0 0.5rem 1rem 0.5rem;
-    transition: all 0.3s ease;
+.upload-zone {
+    border: 2px dashed #93c5fd;
+    border-radius: 0.5rem;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.2s;
+    background-color: rgba(219, 234, 254, 0.3);
     cursor: pointer;
 }
 
-.button:hover {
-    background-color: var(--primary-color);
+.upload-zone:hover {
+    border-color: #3b82f6;
+    background-color: rgba(219, 234, 254, 0.5);
+}
+
+.btn-primary {
+    background-color: #f97316;
     color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 0.5rem 1.5rem;
+    border-radius: 0.375rem;
+    font-weight: 500;
+    display: inline-block;
+    cursor: pointer;
+    transition: background-color 0.2s;
 }
 
-.button-secondary {
-    color: var(--secondary-color);
-    border-color: var(--secondary-color);
+.btn-primary:hover {
+    background-color: #ea580c;
 }
 
-.button-secondary:hover {
-    background-color: var(--secondary-color);
-    color: white;
+.btn-outline {
+    border: 1px solid #9ca3af;
+    color: #4b5563;
+    padding: 0.5rem 1.5rem;
+    border-radius: 0.375rem;
+    font-weight: 500;
+    display: inline-block;
+    cursor: pointer;
+    transition: background-color 0.2s;
 }
 
-.footer {
-    text-align: center;
-    padding: 2rem 0;
-    border-top: 1px solid #eee;
-    margin-top: 2rem;
+.btn-outline:hover {
+    background-color: #f3f4f6;
 }
 
-.footer-links {
+.part-item {
     display: flex;
-    justify-content: center;
-    gap: 1.5rem;
-    margin: 1rem 0;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 0;
 }
 
-.footer-links a {
-    color: var(--dark-text);
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.footer-links a:hover {
-    color: var(--primary-color);
-}
-
-.box-preview {
-    text-align: center;
-    margin: 2rem 0;
-}
-
-.box-image {
-    width: 100px;
-    height: 100px;
-    margin: 0 auto;
-}
-
-.right-section {
+.part-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.375rem;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    text-align: center;
-}
-
-.email {
-    display: block;
-    margin-top: 0.5rem;
-    color: #666;
-}
-
-.built-by {
+    color: white;
     font-weight: bold;
-    color: var(--accent-color);
 }
 
-/* Ensure all text is centered */
-p, h1, h2, h3, h4, h5, h6 {
-    text-align: center;
+.loading {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(59, 130, 246, 0.2);
+    border-radius: 50%;
+    border-top-color: #3b82f6;
+    animation: spin 1s linear infinite;
+    margin: 1rem auto;
 }
 
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.notification {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.375rem;
+    background-color: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease-out;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+}
+
+.notification-success {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.notification-error {
+    background-color: #fee2e2;
+    color: #b91c1c;
+}
+
+.notification-info {
+    background-color: #dbeafe;
+    color: #1e40af;
+}
+
+/* Drop zone highlight */
+.drop-active {
+    border-color: #3b82f6;
+    background-color: rgba(219, 234, 254, 0.7);
+}
+
+/* Responsive adjustments */
 @media (max-width: 768px) {
-    .main-content {
-        flex-direction: column;
+    .card {
+        padding: 1rem;
     }
     
-    .section {
-        min-width: auto;
+    .upload-zone {
+        padding: 1.5rem;
+    }
+    
+    .btn-primary, .btn-outline {
+        padding: 0.375rem 1rem;
     }
 }
