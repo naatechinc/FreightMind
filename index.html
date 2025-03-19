@@ -1,40 +1,392 @@
-<!-- Replace the existing "Upload DXF Files" card with this improved version -->
-<div class="card">
-    <div class="card-header">
-        <h2 class="text-lg font-semibold text-gray-900 flex items-center">
-            <span class="text-xl mr-2">📄</span>
-            Upload DXF Files
-        </h2>
-    </div>
-    <div class="card-body">
-        <div class="upload-zone">
-            <div class="icon text-blue-500">📤</div>
-            <p class="text-sm text-gray-600 mb-2">
-                Upload SolidWorks DXF files to extract part data
-            </p>
-            <p class="text-xs text-gray-500 mb-4">
-                Files will be processed via Make.com integration
-            </p>
-            <input type="file" id="dxfFileInput" accept=".dxf" multiple class="hidden">
-            <button id="dxfUploadBtn" class="btn btn-primary">
-                <span class="mr-2">📄</span>
-                Select DXF Files
-            </button>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI-powered packaging optimization for efficient shipping and storage">
+    <meta name="keywords" content="packaging, optimization, AI, shipping, DXF, computer vision">
+    <title>AI Packaging Optimizer</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="assets/img/favicon.ico">
+    
+    <!-- TailwindCSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8fafc;
+        }
+        
+        .gradient-header {
+            background: linear-gradient(135deg, #f97316 0%, #7e22ce 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: transform 0.2s, box-shadow 0.2s;
+            overflow: hidden;
+            padding: 1.5rem;
+        }
+        
+        .upload-zone {
+            border: 2px dashed #93c5fd;
+            border-radius: 0.5rem;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.2s;
+            background-color: rgba(219, 234, 254, 0.3);
+            cursor: pointer;
+        }
+        
+        .upload-zone:hover {
+            border-color: #3b82f6;
+            background-color: rgba(219, 234, 254, 0.5);
+        }
+        
+        .btn-primary {
+            background-color: #f97316;
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            display: inline-block;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .btn-primary:hover {
+            background-color: #ea580c;
+        }
+        
+        .btn-outline {
+            border: 1px solid #9ca3af;
+            color: #4b5563;
+            padding: 0.5rem 1.5rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            display: inline-block;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .btn-outline:hover {
+            background-color: #f3f4f6;
+        }
+        
+        .loading {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(59, 130, 246, 0.2);
+            border-radius: 50%;
+            border-top-color: #3b82f6;
+            animation: spin 1s linear infinite;
+            margin: 1rem auto;
+            display: none;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="container mx-auto p-4">
+        <div class="gradient-header">
+            <h1 class="text-3xl font-bold">AI Packaging Optimizer</h1>
+            <p class="mt-2">Optimize your shipping packages with AI-powered arrangement</p>
+        </div>
+        
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+            <!-- Upload DXF Files Card -->
+            <div class="card">
+                <div class="mb-4 flex items-center">
+                    <span class="text-2xl mr-3">📦</span>
+                    <h2 class="text-xl font-semibold text-gray-800">Upload DXF Files</h2>
+                </div>
+                
+                <p class="text-gray-600 mb-4">Upload file to extract part data</p>
+                
+                <div class="upload-zone mb-4" id="uploadZone">
+                    <input type="file" id="dxfFileInput" accept=".dxf" multiple class="hidden">
+                    <div class="mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                        </svg>
+                    </div>
+                    <p class="text-sm text-gray-500 mb-2">Drag and drop DXF files here or click to browse</p>
+                    <p class="text-xs text-gray-400">Files will be processed via Make.com integration</p>
+                </div>
+                
+                <div class="flex flex-col space-y-2">
+                    <button id="uploadBtn" class="btn-primary">Upload DXF Files</button>
+                    <button id="selectBtn" class="btn-outline">Select DXF Files</button>
+                </div>
+                
+                <div id="uploadStatus" class="mt-4 hidden">
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-gray-700" id="uploadStatusText">Processing files...</span>
+                        <span class="text-xs text-gray-500" id="uploadProgress">0/0</span>
+                    </div>
+                    <div class="loading" id="uploadSpinner"></div>
+                </div>
+            </div>
             
-            <div class="mt-2 text-xs text-gray-500">
-                You can also drag and drop DXF files here
+            <!-- Capture Parts Card -->
+            <div class="card">
+                <div class="mb-4 flex items-center">
+                    <span class="text-2xl mr-3">📷</span>
+                    <h2 class="text-xl font-semibold text-gray-800">Capture Parts</h2>
+                </div>
+                
+                <p class="text-gray-600 mb-4">Take a photo to detect parts automatically</p>
+                
+                <div class="flex justify-center mb-4">
+                    <img src="assets/img/camera-placeholder.png" alt="Camera" class="w-full max-w-xs rounded-lg">
+                </div>
+                
+                <button id="captureBtn" class="btn-primary w-full">Capture Photo</button>
+            </div>
+            
+            <!-- Ready to Optimize Card -->
+            <div class="card">
+                <div class="text-center">
+                    <img src="assets/img/box-placeholder.png" alt="Box placeholder" class="w-32 h-32 mx-auto mb-4">
+                    
+                    <h2 class="text-xl font-semibold text-gray-800 mb-2">Ready to Optimize Your Packaging</h2>
+                    
+                    <p class="text-gray-600 mb-6">
+                        Capture a photo of your parts or upload DXF files to get started with AI-powered packaging optimization.
+                    </p>
+                    
+                    <div id="optimizeContainer" class="hidden">
+                        <button id="optimizeBtn" class="btn-primary w-full">
+                            Optimize Packaging
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
         
-        <!-- Status messages will appear here -->
-        <div id="uploadStatus" class="mt-4 hidden">
-            <div class="flex items-center justify-between">
-                <span class="text-sm text-gray-700" id="uploadStatusText">Processing files...</span>
-                <span class="text-xs text-gray-500" id="uploadProgress">0/0</span>
-            </div>
-            <div class="progress-bar mt-1">
-                <div class="progress-bar-fill" id="uploadProgressBar" style="width: 0%"></div>
+        <!-- Detected Parts Section (Initially Hidden) -->
+        <div id="detectedParts" class="mt-8 hidden">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-semibold text-gray-800">Detected Parts (<span id="partsCount">0</span>)</h2>
+                    <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">AI Detected</span>
+                </div>
+                
+                <div id="partsList" class="divide-y">
+                    <!-- Parts will be inserted here by JavaScript -->
+                </div>
+                
+                <div class="mt-6">
+                    <button id="optimizePartsBtn" class="btn-primary w-full">
+                        Optimize Packaging
+                    </button>
+                </div>
             </div>
         </div>
+        
+        <!-- Packaging Solution (Initially Hidden) -->
+        <div id="packagingSolution" class="mt-8 hidden">
+            <!-- Packaging solution content will be filled by JavaScript -->
+        </div>
     </div>
-</div>
+    
+    <!-- Footer -->
+    <footer class="mt-12 py-6 bg-gray-100">
+        <div class="container mx-auto px-4 text-center text-gray-600">
+            <p>&copy; 2025 AI Packaging Optimizer | <a href="https://freightmind.link" class="text-blue-500 hover:underline">freightmind.link</a></p>
+        </div>
+    </footer>
+    
+    <!-- JavaScript Files -->
+    <script src="dxf-parser.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get elements
+            const uploadZone = document.getElementById('uploadZone');
+            const uploadBtn = document.getElementById('uploadBtn');
+            const selectBtn = document.getElementById('selectBtn');
+            const dxfFileInput = document.getElementById('dxfFileInput');
+            const captureBtn = document.getElementById('captureBtn');
+            const uploadStatus = document.getElementById('uploadStatus');
+            const uploadStatusText = document.getElementById('uploadStatusText');
+            const uploadProgress = document.getElementById('uploadProgress');
+            const uploadSpinner = document.getElementById('uploadSpinner');
+            const optimizeBtn = document.getElementById('optimizeBtn');
+            const optimizePartsBtn = document.getElementById('optimizePartsBtn');
+            const optimizeContainer = document.getElementById('optimizeContainer');
+            
+            // Upload button click
+            if (uploadBtn) {
+                uploadBtn.addEventListener('click', function() {
+                    dxfFileInput.click();
+                });
+            }
+            
+            // Select button click
+            if (selectBtn) {
+                selectBtn.addEventListener('click', function() {
+                    dxfFileInput.click();
+                });
+            }
+            
+            // Upload zone click
+            if (uploadZone) {
+                uploadZone.addEventListener('click', function() {
+                    dxfFileInput.click();
+                });
+            }
+            
+            // File input change
+            if (dxfFileInput) {
+                dxfFileInput.addEventListener('change', function(e) {
+                    if (e.target.files.length > 0) {
+                        handleFiles(e.target.files);
+                    }
+                });
+            }
+            
+            // Handle file upload
+            function handleFiles(files) {
+                // Show status and spinner
+                uploadStatus.classList.remove('hidden');
+                uploadStatusText.textContent = `Processing ${files.length} file(s)...`;
+                uploadProgress.textContent = `0/${files.length}`;
+                uploadSpinner.style.display = 'block';
+                
+                // Process files with our dxf-parser.js
+                if (window.dxfParser && window.dxfParser.processMultipleDXFs) {
+                    window.dxfParser.processMultipleDXFs(files)
+                        .then(parts => {
+                            // Hide spinner and update status
+                            uploadSpinner.style.display = 'none';
+                            uploadStatusText.textContent = 'Processing complete!';
+                            
+                            // Show optimize button
+                            if (optimizeContainer) {
+                                optimizeContainer.classList.remove('hidden');
+                            }
+                            
+                            // If we have parts detected
+                            if (parts && parts.length > 0) {
+                                // Show parts
+                                const detectedParts = document.getElementById('detectedParts');
+                                if (detectedParts) {
+                                    detectedParts.classList.remove('hidden');
+                                }
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            uploadStatusText.textContent = 'Error processing files';
+                            uploadSpinner.style.display = 'none';
+                        });
+                } else {
+                    console.error('dxf-parser.js not loaded properly');
+                    uploadStatusText.textContent = 'Error: Could not process files';
+                    uploadSpinner.style.display = 'none';
+                }
+            }
+            
+            // Capture button click (placeholder for now)
+            if (captureBtn) {
+                captureBtn.addEventListener('click', function() {
+                    alert('Camera capture functionality would open here');
+                });
+            }
+            
+            // Optimize buttons
+            [optimizeBtn, optimizePartsBtn].forEach(btn => {
+                if (btn) {
+                    btn.addEventListener('click', function() {
+                        alert('Optimization would run here');
+                        // In a real implementation, this would show the packaging solution
+                    });
+                }
+            });
+            
+            // Setup drag and drop for the upload zone
+            if (uploadZone) {
+                ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                    uploadZone.addEventListener(eventName, preventDefaults, false);
+                });
+                
+                function preventDefaults(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+                
+                ['dragenter', 'dragover'].forEach(eventName => {
+                    uploadZone.addEventListener(eventName, highlight, false);
+                });
+                
+                ['dragleave', 'drop'].forEach(eventName => {
+                    uploadZone.addEventListener(eventName, unhighlight, false);
+                });
+                
+                function highlight() {
+                    uploadZone.classList.add('border-blue-500', 'bg-blue-50');
+                }
+                
+                function unhighlight() {
+                    uploadZone.classList.remove('border-blue-500', 'bg-blue-50');
+                }
+                
+                uploadZone.addEventListener('drop', function(e) {
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0) {
+                        handleFiles(files);
+                    }
+                });
+            }
+        });
+        
+        // Create a global notification function
+        window.showNotification = function(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed bottom-4 right-4 p-4 rounded-lg shadow-lg z-50 transition-opacity duration-500 ${
+                type === 'success' ? 'bg-green-100 text-green-800' :
+                type === 'error' ? 'bg-red-100 text-red-800' :
+                'bg-blue-100 text-blue-800'
+            }`;
+            
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <div class="mr-3 text-xl">
+                        ${type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️'}
+                    </div>
+                    <p>${message}</p>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => {
+                    notification.remove();
+                }, 500);
+            }, 3000);
+        };
+    </script>
+</body>
+</html>
