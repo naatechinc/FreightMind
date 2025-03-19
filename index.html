@@ -271,7 +271,7 @@
     <footer class="mt-12 py-6 bg-gray-100">
         <div class="container mx-auto px-4 text-center text-gray-600">
             <p>&copy; 2025 AI Packaging Optimizer | <a href="https://freightmind.link" class="text-blue-500 hover:underline">freightmind.link</a></p>
-            <p class="mt-2">Built by NaaTech | <a href="mailto:contact@naatech.com" class="text-blue-500 hover:underline">contact@naatech.com</a></p>
+            <p class="mt-2">Built by NaaTech | <a href="mailto:naatechinc@gmail.com" class="text-blue-500 hover:underline">naatechinc@gmail.com</a></p>
         </div>
     </footer>
     
@@ -311,7 +311,11 @@
             // Upload button click
             if (uploadBtn) {
                 uploadBtn.addEventListener('click', function() {
-                    dxfFileInput.click();
+                    if (selectedFiles.length > 0) {
+                        handleDXFFiles(selectedFiles);
+                    } else {
+                        dxfFileInput.click();
+                    }
                 });
             }
             
@@ -325,7 +329,11 @@
             // Capture button click
             if (captureBtn) {
                 captureBtn.addEventListener('click', function() {
-                    captureFileInput.click();
+                    if (selectedImage) {
+                        handleCaptureFiles([selectedImage]);
+                    } else {
+                        captureFileInput.click();
+                    }
                 });
             }
             
@@ -489,24 +497,6 @@
                     }, 500);
                 }, 3000);
             };
-            
-            // Upload button click handler
-            uploadBtn.addEventListener('click', function() {
-                if (selectedFiles.length > 0) {
-                    handleDXFFiles(selectedFiles);
-                } else {
-                    dxfFileInput.click();
-                }
-            });
-            
-            // Capture button click handler
-            captureBtn.addEventListener('click', function() {
-                if (selectedImage) {
-                    handleCaptureFiles([selectedImage]);
-                } else {
-                    captureFileInput.click();
-                }
-            });
             
             // Handle DXF file upload
             function handleDXFFiles(files) {
