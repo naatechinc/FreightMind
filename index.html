@@ -36,7 +36,7 @@
             padding: 1.5rem;
         }
         
-        .upload-zone {
+        .upload-zone, .capture-zone {
             border: 2px dashed #93c5fd;
             border-radius: 0.5rem;
             padding: 2rem;
@@ -46,7 +46,7 @@
             cursor: pointer;
         }
         
-        .upload-zone:hover {
+        .upload-zone:hover, .capture-zone:hover, .upload-zone.active, .capture-zone.active {
             border-color: #3b82f6;
             background-color: rgba(219, 234, 254, 0.5);
         }
@@ -60,25 +60,12 @@
             display: inline-block;
             cursor: pointer;
             transition: background-color 0.2s;
+            width: 100%;
+            text-align: center;
         }
         
         .btn-primary:hover {
             background-color: #ea580c;
-        }
-        
-        .btn-outline {
-            border: 1px solid #9ca3af;
-            color: #4b5563;
-            padding: 0.5rem 1.5rem;
-            border-radius: 0.375rem;
-            font-weight: 500;
-            display: inline-block;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        
-        .btn-outline:hover {
-            background-color: #f3f4f6;
         }
         
         .loading {
@@ -140,10 +127,7 @@
                     <p class="text-xs text-gray-400">Files will be processed via Make.com integration</p>
                 </div>
                 
-                <div class="flex flex-col space-y-2">
-                    <button id="uploadBtn" class="btn-primary">Upload DXF Files</button>
-                    <button id="selectBtn" class="btn-outline">Select DXF Files</button>
-                </div>
+                <button id="uploadBtn" class="btn-primary">Upload DXF Files</button>
                 
                 <div id="uploadStatus" class="mt-4 hidden">
                     <div class="flex items-center justify-between">
@@ -163,13 +147,23 @@
                 
                 <p class="text-gray-600 mb-4">Take a photo to detect parts automatically</p>
                 
-                <div class="flex justify-center mb-4">
-                    <div class="bg-gray-100 rounded-lg w-full h-40 flex items-center justify-center">
-                        <span class="text-5xl">📷</span>
+                <div class="capture-zone mb-4" id="captureZone">
+                    <input type="file" id="captureFileInput" accept="image/*" capture class="hidden">
+                    <div class="icon-container mb-4">
+                        <span class="text-4xl">📷</span>
                     </div>
+                    <p class="text-sm text-gray-500 mb-2">Drag and drop image here</p>
+                    <p class="text-xs text-gray-400">Or use your camera to capture parts</p>
                 </div>
                 
-                <button id="captureBtn" class="btn-primary w-full">Capture Photo</button>
+                <button id="captureBtn" class="btn-primary">Capture Photo</button>
+                
+                <div id="captureStatus" class="mt-4 hidden">
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-gray-700" id="captureStatusText">Processing image...</span>
+                    </div>
+                    <div class="loading" id="captureSpinner"></div>
+                </div>
             </div>
             
             <!-- Ready to Optimize Card -->
@@ -186,7 +180,7 @@
                     </p>
                     
                     <div id="optimizeContainer" class="hidden">
-                        <button id="optimizeBtn" class="btn-primary w-full">
+                        <button id="optimizeBtn" class="btn-primary">
                             Optimize Packaging
                         </button>
                     </div>
@@ -207,7 +201,7 @@
                 </div>
                 
                 <div class="mt-6">
-                    <button id="optimizePartsBtn" class="btn-primary w-full">
+                    <button id="optimizePartsBtn" class="btn-primary">
                         Optimize Packaging
                     </button>
                 </div>
@@ -230,16 +224,24 @@
     <!-- JavaScript Files -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Get elements
+            // Get elements - Upload
             const uploadZone = document.getElementById('uploadZone');
             const uploadBtn = document.getElementById('uploadBtn');
-            const selectBtn = document.getElementById('selectBtn');
             const dxfFileInput = document.getElementById('dxfFileInput');
-            const captureBtn = document.getElementById('captureBtn');
             const uploadStatus = document.getElementById('uploadStatus');
             const uploadStatusText = document.getElementById('uploadStatusText');
             const uploadProgress = document.getElementById('uploadProgress');
             const uploadSpinner = document.getElementById('uploadSpinner');
+            
+            // Get elements - Capture
+            const captureZone = document.getElementById('captureZone');
+            const captureBtn = document.getElementById('captureBtn');
+            const captureFileInput = document.getElementById('captureFileInput');
+            const captureStatus = document.getElementById('captureStatus');
+            const captureStatusText = document.getElementById('captureStatusText');
+            const captureSpinner = document.getElementById('captureSpinner');
+            
+            // Get elements - Other
             const optimizeBtn = document.getElementById('optimizeBtn');
             const optimizePartsBtn = document.getElementById('optimizePartsBtn');
             const optimizeContainer = document.getElementById('optimizeContainer');
@@ -251,13 +253,6 @@
                 });
             }
             
-            // Select button click
-            if (selectBtn) {
-                selectBtn.addEventListener('click', function() {
-                    dxfFileInput.click();
-                });
-            }
-            
             // Upload zone click
             if (uploadZone) {
                 uploadZone.addEventListener('click', function() {
@@ -265,11 +260,34 @@
                 });
             }
             
-            // File input change
+            // Capture button click
+            if (captureBtn) {
+                captureBtn.addEventListener('click', function() {
+                    captureFileInput.click();
+                });
+            }
+            
+            // Capture zone click
+            if (captureZone) {
+                captureZone.addEventListener('click', function() {
+                    captureFileInput.click();
+                });
+            }
+            
+            // File input change - DXF
             if (dxfFileInput) {
                 dxfFileInput.addEventListener('change', function(e) {
                     if (e.target.files.length > 0) {
-                        handleFiles(e.target.files);
+                        handleDXFFiles(e.target.files);
+                    }
+                });
+            }
+            
+            // File input change - Capture
+            if (captureFileInput) {
+                captureFileInput.addEventListener('change', function(e) {
+                    if (e.target.files.length > 0) {
+                        handleCaptureFiles(e.target.files);
                     }
                 });
             }
@@ -302,8 +320,8 @@
                 }, 3000);
             };
             
-            // Handle file upload
-            function handleFiles(files) {
+            // Handle DXF file upload
+            function handleDXFFiles(files) {
                 // Show status and spinner
                 uploadStatus.classList.remove('hidden');
                 uploadStatusText.textContent = `Processing ${files.length} file(s)...`;
@@ -330,6 +348,7 @@
                                 if (detectedParts) {
                                     detectedParts.classList.remove('hidden');
                                 }
+                                showNotification(`Successfully processed ${parts.length} part(s)`, 'success');
                             }
                         })
                         .catch(error => {
@@ -346,11 +365,91 @@
                 }
             }
             
-            // Capture button click (placeholder for now)
-            if (captureBtn) {
-                captureBtn.addEventListener('click', function() {
-                    showNotification('Camera capture feature coming soon', 'info');
-                });
+            // Handle image capture files
+            function handleCaptureFiles(files) {
+                // Show status and spinner
+                captureStatus.classList.remove('hidden');
+                captureStatusText.textContent = 'Processing image...';
+                captureSpinner.style.display = 'block';
+                
+                // Simulate image processing (this would integrate with your AI vision system)
+                setTimeout(() => {
+                    captureSpinner.style.display = 'none';
+                    captureStatusText.textContent = 'Image processed successfully';
+                    
+                    // Show optimize button
+                    if (optimizeContainer) {
+                        optimizeContainer.classList.remove('hidden');
+                    }
+                    
+                    // Generate some placeholder detected parts
+                    const mockParts = [
+                        {
+                            id: 1,
+                            name: "Bracket Assembly",
+                            partNumber: "PN-1234",
+                            dimensions: { width: 12, height: 8, depth: 3 },
+                            color: "#3B82F6"
+                        },
+                        {
+                            id: 2,
+                            name: "Support Frame",
+                            partNumber: "PN-5678",
+                            dimensions: { width: 18, height: 10, depth: 4 },
+                            color: "#10B981"
+                        }
+                    ];
+                    
+                    // Update the parts list
+                    updatePartsList(mockParts);
+                    
+                    // Show parts
+                    const detectedParts = document.getElementById('detectedParts');
+                    if (detectedParts) {
+                        detectedParts.classList.remove('hidden');
+                    }
+                    
+                    showNotification('Parts detected in image', 'success');
+                }, 2000);
+            }
+            
+            // Update the parts list in the UI
+            function updatePartsList(parts) {
+                const partsList = document.getElementById('partsList');
+                const partsCount = document.getElementById('partsCount');
+                
+                if (partsList && partsCount) {
+                    // Update count
+                    partsCount.textContent = parts.length;
+                    
+                    // Clear current list
+                    partsList.innerHTML = '';
+                    
+                    // Add parts
+                    parts.forEach(part => {
+                        const volume = part.dimensions.width * part.dimensions.height * part.dimensions.depth;
+                        
+                        const partItem = document.createElement('div');
+                        partItem.className = 'py-4 flex justify-between items-center';
+                        partItem.innerHTML = `
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 flex items-center justify-center rounded-md mr-3 text-white" style="background-color: ${part.color}">
+                                    ${part.id}
+                                </div>
+                                <div>
+                                    <h3 class="font-medium">${part.name}</h3>
+                                    <p class="text-sm text-gray-500">${part.partNumber}</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-sm">${part.dimensions.width}" × ${part.dimensions.height}" × ${part.dimensions.depth}"</p>
+                                <p class="text-xs text-gray-500">Volume: ${volume} cu in</p>
+                            </div>
+                        `;
+                        
+                        partsList.appendChild(partItem);
+                    });
+                }
             }
             
             // Optimize buttons
@@ -363,9 +462,17 @@
             });
             
             // Setup drag and drop for the upload zone
-            if (uploadZone) {
+            setupDragDrop(uploadZone, handleDXFFiles, ['.dxf']);
+            
+            // Setup drag and drop for the capture zone
+            setupDragDrop(captureZone, handleCaptureFiles, ['image/jpeg', 'image/png', 'image/gif']);
+            
+            // Setup drag and drop functionality
+            function setupDragDrop(element, handleFunction, acceptTypes) {
+                if (!element) return;
+                
                 ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-                    uploadZone.addEventListener(eventName, preventDefaults, false);
+                    element.addEventListener(eventName, preventDefaults, false);
                 });
                 
                 function preventDefaults(e) {
@@ -374,25 +481,38 @@
                 }
                 
                 ['dragenter', 'dragover'].forEach(eventName => {
-                    uploadZone.addEventListener(eventName, highlight, false);
+                    element.addEventListener(eventName, () => {
+                        element.classList.add('active');
+                    }, false);
                 });
                 
                 ['dragleave', 'drop'].forEach(eventName => {
-                    uploadZone.addEventListener(eventName, unhighlight, false);
+                    element.addEventListener(eventName, () => {
+                        element.classList.remove('active');
+                    }, false);
                 });
                 
-                function highlight() {
-                    uploadZone.classList.add('border-blue-500', 'bg-blue-50');
-                }
-                
-                function unhighlight() {
-                    uploadZone.classList.remove('border-blue-500', 'bg-blue-50');
-                }
-                
-                uploadZone.addEventListener('drop', function(e) {
-                    const files = e.dataTransfer.files;
+                element.addEventListener('drop', function(e) {
+                    const dt = e.dataTransfer;
+                    const files = dt.files;
+                    
                     if (files.length > 0) {
-                        handleFiles(files);
+                        // Filter files by acceptable types
+                        const validFiles = Array.from(files).filter(file => {
+                            if (acceptTypes[0].startsWith('.')) {
+                                // Check file extension
+                                return acceptTypes.some(ext => file.name.toLowerCase().endsWith(ext));
+                            } else {
+                                // Check MIME type
+                                return acceptTypes.some(type => file.type.match(type));
+                            }
+                        });
+                        
+                        if (validFiles.length > 0) {
+                            handleFunction(validFiles);
+                        } else {
+                            showNotification(`Please drop only ${acceptTypes.join(', ')} files`, 'error');
+                        }
                     }
                 });
             }
