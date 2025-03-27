@@ -279,14 +279,14 @@ filesList.innerHTML = Array.from(uploadedBoxFiles).map(file => `
 <div class="flex items-center justify-between bg-white/10 backdrop-blur-sm p-2 rounded">
 <div class="flex items-center gap-2">
 <i class="ri-file-line"></i>
-<span class="text-sm">${file.name}</span>
-</div>
-<div class="flex items-center gap-4">
+<div class="flex flex-col">
+<span class="text-sm font-medium">${file.name}</span>
 <span class="text-xs opacity-70">${file.uploadTime}</span>
-<button onclick="removeBoxFile('${file.name}')" class="text-white hover:text-red-200">
+</div>
+</div>
+<button onclick="removeBoxFile('${file.name}')" class="text-white hover:text-red-200 p-2">
 <i class="ri-delete-bin-line"></i>
 </button>
-</div>
 </div>
 `).join('');
 }
@@ -295,53 +295,32 @@ uploadedBoxFiles = new Set(Array.from(uploadedBoxFiles).filter(file => file.name
 updateBoxesList();
 }
 async function handleBoxFileUpload(files) {
-updateBoxesButton(true);
-const file = files[0];
-if (!file) return;
-try {
-const reader = new FileReader();
-reader.onload = async (e) => {
-let jsonData;
-if (file.name.endsWith('.json')) {
-jsonData = JSON.parse(e.target.result);
-} else {
-// For CSV/Excel files, create a simple JSON structure
-jsonData = {
-fileName: file.name,
-uploadTime: new Date().toISOString(),
-content: e.target.result
-};
-}
-try {
-const response = await fetch('https://hook.us1.make.com/727pice93yylf3j70efljviowjapa1n4', {
-method: 'POST',
-headers: {
-'Content-Type': 'application/json'
-},
-body: JSON.stringify(jsonData)
-});
-if (response.ok) {
-file.uploadTime = new Date().toLocaleString();
-uploadedBoxFiles.add(file);
-updateBoxesList();
-showNotification('Box specifications uploaded successfully!');
-} else {
-showNotification('Upload failed. Please try again.');
-}
-} catch (error) {
-showNotification('An error occurred. Please try again.');
-}
-};
-if (file.name.endsWith('.json')) {
-reader.readAsText(file);
-} else {
-reader.readAsDataURL(file);
-}
-} catch (error) {
-showNotification('Error processing file. Please check the format.');
-} finally {
-updateBoxesButton(false);
-}
+  updateBoxesButton(true);
+  const file = files[0];
+  if (!file) return;
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('fileName', file.name);
+    formData.append('uploadTime', new Date().toLocaleString());
+    const response = await fetch('https://hook.us1.make.com/727pice93yylf3j70efljviowjapa1n4', {
+      method: 'POST',
+      body: formData
+    });
+    if (response.ok) {
+      file.uploadTime = new Date().toLocaleString();
+      uploadedBoxFiles.add(file);
+      updateBoxesList();
+      showNotification('Box specifications uploaded successfully!');
+    } else {
+      showNotification('Upload failed. Please try again.');
+    }
+  } catch (error) {
+    console.error('Upload error:', error);
+    showNotification('An error occurred. Please try again.');
+  } finally {
+    updateBoxesButton(false);
+  }
 }
 boxesUpload.addEventListener('change', (e) => handleBoxFileUpload(e.target.files));
 document.getElementById('uploadBoxesBtn').addEventListener('click', () => {
