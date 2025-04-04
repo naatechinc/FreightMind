@@ -70,7 +70,7 @@ async function sendToMakeWebhook(fileBuffer, fileName) {
     // Convert ArrayBuffer to Base64
     const base64File = arrayBufferToBase64(fileBuffer);
     
-    // Prepare form data for the webhook
+    // Prepare payload for the webhook
     const payload = {
         filename: fileName,
         fileContent: base64File,
@@ -164,7 +164,7 @@ async function processMultipleDXFs(files) {
     }
     
     // Disable the upload button if it exists
-    const dxfUploadBtn = document.getElementById('dxfUploadBtn');
+    const dxfUploadBtn = document.getElementById('uploadDxfBtn');
     if (dxfUploadBtn) {
         dxfUploadBtn.disabled = true;
     }
@@ -247,23 +247,6 @@ function readFileAsArrayBuffer(file) {
         
         reader.readAsArrayBuffer(file);
     });
-}
-
-/**
- * Extract dimensions from DXF entities
- * 
- * @param {Array} entities - DXF entities array
- * @returns {Object} - Object containing the part dimensions
- */
-function extractDimensionsFromEntities(entities) {
-    // This would analyze the entities to determine part dimensions
-    // For demo, we return mock dimensions
-    return {
-        width: 10,
-        height: 8,
-        depth: 3,
-        volume: 240
-    };
 }
 
 /**
