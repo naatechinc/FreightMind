@@ -1,503 +1,408 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Packaging Optimizer - FreightMind.link</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet">
-<style>
-:where([class^="ri-"])::before { content: "\f3c2"; }
-.gradient-bg {
-background: linear-gradient(90deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%);
-}
-.upload-zone {
-border: 2px dashed #E2E8F0;
-transition: all 0.3s ease;
-}
-.upload-zone:hover {
-border-color: #4158D0;
-background-color: rgba(65, 88, 208, 0.05);
-}
-.custom-file-input {
-opacity: 0;
-position: absolute;
-width: 100%;
-height: 100%;
-cursor: pointer;
-}
-.section-1 {
-background: linear-gradient(135deg, #43CBFF 10%, #9708CC 100%);
-}
-.section-2 {
-background: linear-gradient(135deg, #FF6B6B 10%, #FFE66D 100%);
-}
-.section-3 {
-background: linear-gradient(135deg, #00F5A0 10%, #00D9F5 100%);
-}
-</style>
-<script>
-tailwind.config = {
-theme: {
-extend: {
-colors: {
-primary: '#4158D0',
-secondary: '#C850C0'
-},
-borderRadius: {
-'none': '0px',
-'sm': '4px',
-DEFAULT: '8px',
-'md': '12px',
-'lg': '16px',
-'xl': '20px',
-'2xl': '24px',
-'3xl': '32px',
-'full': '9999px',
-'button': '8px'
-}
-}
-}
-}
-</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Packaging Optimizer</title>
+    <style>
+        :root {
+            --primary-color: #ff8c00;
+            --secondary-color: #4a86e8;
+            --accent-color: #34a853;
+            --light-bg: #f8f9fa;
+            --dark-text: #333;
+            --light-text: #fff;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 0;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header h1 {
+            color: var(--light-text);
+            font-size: 2.5rem;
+            margin: 0.5rem 0;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        
+        .header p {
+            color: var(--light-text);
+            font-size: 1.2rem;
+            margin: 0.5rem 0;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: space-between;
+            margin-bottom: 3rem;
+        }
+        
+        .section {
+            flex: 1;
+            min-width: 300px;
+            background-color: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+        
+        .section-title {
+            font-size: 1.4rem;
+            color: var(--primary-color);
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .section-description {
+            color: #666;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .box-icon {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+        }
+        
+        .camera-icon {
+            font-size: 1.8rem;
+            color: var(--secondary-color);
+        }
+        
+        .button {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background-color: white;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+            border-radius: 6px;
+            font-weight: bold;
+            text-decoration: none;
+            margin: 0 0.5rem 1rem 0.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .button:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .button-secondary {
+            color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+        
+        .button-secondary:hover {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 2rem 0;
+            border-top: 1px solid #eee;
+            margin-top: 2rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 1rem 0;
+        }
+        
+        .footer-links a {
+            color: var(--dark-text);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+        
+        .box-preview {
+            text-align: center;
+            margin: 2rem 0;
+        }
+        
+        .box-image {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto;
+        }
+
+        .right-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        
+        /* Ensure all text is centered */
+        p, h1, h2, h3, h4, h5, h6 {
+            text-align: center;
+        }
+        
+        .email {
+            display: block;
+            margin-top: 0.5rem;
+            color: #666;
+        }
+        
+        .built-by {
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .section {
+                min-width: auto;
+            }
+        }
+        .drop-area {
+            border: 2px dashed var(--primary-color);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+        
+        .drop-area.highlight {
+            background-color: rgba(255, 140, 0, 0.1);
+        }
+        
+        .photo-drop-area {
+            border-color: var(--secondary-color);
+        }
+        
+        .photo-drop-area.highlight {
+            background-color: rgba(74, 134, 232, 0.1);
+        }
+        
+        .file-info {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DXF file upload functionality
+            const dropArea = document.getElementById('drop-area');
+            const fileInput = document.getElementById('dxf-file-input');
+            const fileInfo = document.getElementById('file-info');
+            
+            // Photo capture functionality
+            const photoDropArea = document.getElementById('photo-drop-area');
+            const photoInput = document.getElementById('camera-input');
+            const photoInfo = document.getElementById('photo-info');
+            
+            // Helper functions for drag and drop
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            
+            function setupDropArea(area, input, infoEl) {
+                ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                    area.addEventListener(eventName, preventDefaults, false);
+                });
+                
+                ['dragenter', 'dragover'].forEach(eventName => {
+                    area.addEventListener(eventName, () => area.classList.add('highlight'), false);
+                });
+                
+                ['dragleave', 'drop'].forEach(eventName => {
+                    area.addEventListener(eventName, () => area.classList.remove('highlight'), false);
+                });
+                
+                area.addEventListener('drop', function(e) {
+                    const dt = e.dataTransfer;
+                    const files = dt.files;
+                    handleFiles(files, infoEl);
+                    
+                    // Update the file input to match the dropped files
+                    if (files.length > 0) {
+                        // Create a new DataTransfer object
+                        const dataTransfer = new DataTransfer();
+                        
+                        // Add all dropped files to the DataTransfer object
+                        for (let i = 0; i < files.length; i++) {
+                            // Only add files that match the input's accept attribute
+                            if (input.accept.includes(files[i].type.split('/')[0]) || 
+                                input.accept.includes(files[i].type) ||
+                                input.accept === '*') {
+                                dataTransfer.items.add(files[i]);
+                            }
+                        }
+                        
+                        // Assign the DataTransfer files to the input
+                        input.files = dataTransfer.files;
+                        
+                        // Dispatch a change event
+                        const event = new Event('change', { bubbles: true });
+                        input.dispatchEvent(event);
+                    }
+                });
+                
+                input.addEventListener('change', function() {
+                    handleFiles(this.files, infoEl);
+                });
+                
+                // Clicking anywhere in the drop area triggers the file input
+                area.addEventListener('click', function(e) {
+                    // Prevent click on label from triggering twice
+                    if (e.target.tagName.toLowerCase() !== 'label') {
+                        input.click();
+                    }
+                });
+            }
+            
+            function handleFiles(files, infoEl) {
+                if (files.length > 0) {
+                    const fileNames = Array.from(files).map(file => file.name).join(', ');
+                    infoEl.textContent = `Selected: ${fileNames}`;
+                    // Here you can add code to process the files
+                }
+            }
+            
+            // Setup DXF drop area
+            setupDropArea(dropArea, fileInput, fileInfo);
+            
+            // Setup Photo drop area
+            setupDropArea(photoDropArea, photoInput, photoInfo);
+        });
+    </script>
 </head>
-<body class="bg-gray-50 min-h-screen">
-<div class="fixed top-1/2 -translate-y-1/2 right-4 z-50">
-<button onclick="openFeedback()" class="bg-primary text-white px-2 py-4 rounded-button flex flex-col items-center gap-2 hover:bg-opacity-90 transition-all shadow-lg">
-<i class="ri-feedback-line"></i>
-<span class="whitespace-nowrap [writing-mode:vertical-lr] rotate-180">Send Feedback</span>
-</button>
-</div>
-<div id="feedbackModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-<div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-<div class="flex justify-between items-center mb-4">
-<h3 class="text-xl font-semibold text-gray-800">Send Feedback</h3>
-<button onclick="closeFeedback()" class="text-gray-500 hover:text-gray-700">
-<i class="ri-close-line text-xl"></i>
-</button>
-</div>
-<textarea id="feedbackText" class="w-full h-32 p-3 border border-gray-200 rounded mb-4 focus:outline-none focus:border-primary" placeholder="Tell us what you think..."></textarea>
-<div class="flex gap-2">
-<button onclick="closeFeedback()" class="flex-1 bg-gray-100 text-gray-600 py-2 rounded-button hover:bg-gray-200 transition-all">Cancel</button>
-<button onclick="submitFeedback()" class="flex-1 bg-primary text-white py-2 rounded-button hover:bg-opacity-90 transition-all">Send Email</button>
-</div>
-</div>
-</div>
-<header class="gradient-bg py-12 px-4 text-center text-white">
-<h1 class="text-4xl font-bold mb-4">AI Packaging Optimizer</h1>
-<p class="text-lg">Optimize your shipping packages with AI-powered arrangement</p>
-</header>
-<main class="container mx-auto px-4 py-12">
-<div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-<!-- Upload DXF Files Card -->
-<div class="section-1 text-white rounded-lg shadow-md p-6">
-<div class="flex items-center gap-3 mb-4">
-<div class="w-8 h-8 flex items-center justify-center">
-<i class="ri-box-3-line text-white text-2xl"></i>
-</div>
-<h2 class="text-xl font-semibold">Upload DXF Files</h2>
-</div>
-<p class="text-white/90 mb-4">Upload file to extract part data</p>
-<div class="upload-zone rounded-lg p-8 text-center relative mb-4">
-<input type="file" class="custom-file-input" accept=".dxf" multiple id="dxfUpload">
-<div class="w-12 h-12 mx-auto mb-4 flex items-center justify-center">
-<i class="ri-upload-cloud-2-line text-3xl text-gray-400"></i>
-</div>
-<p class="text-white/90 mb-2">Drag and drop DXF files here</p>
-<p class="text-sm text-white/70">Files will be processed via Make.com integration</p>
-</div>
-<button id="uploadDxfBtn" class="w-full bg-primary text-white py-3 px-6 rounded-button hover:bg-opacity-90 transition-all flex items-center justify-center gap-2">
-<span>Upload DXF Files</span>
-</button>
-<div id="uploadedFilesList" class="mt-4 space-y-2"></div>
-</div>
-<!-- Capture Parts Card -->
-<div class="section-2 text-white rounded-lg shadow-md p-6">
-<div class="flex items-center gap-3 mb-4">
-<div class="w-8 h-8 flex items-center justify-center">
-<i class="ri-camera-line text-white text-2xl"></i>
-</div>
-<h2 class="text-xl font-semibold">Capture Parts</h2>
-</div>
-<p class="text-white/90 mb-4">Take a photo to detect parts automatically</p>
-<div class="upload-zone rounded-lg p-8 text-center relative mb-4">
-<input type="file" class="custom-file-input" accept="image/*" capture="environment" id="imageUpload">
-<div class="w-12 h-12 mx-auto mb-4 flex items-center justify-center">
-<i class="ri-camera-line text-3xl text-gray-400"></i>
-</div>
-<p class="text-white/90 mb-2">Drag and drop image here</p>
-<p class="text-sm text-white/70">Or use your camera to capture parts</p>
-</div>
-<button id="capturePhotoBtn" class="w-full bg-primary text-white py-3 px-6 rounded-button hover:bg-opacity-90 transition-all">
-Capture Photo
-</button>
-<div id="photoPreview" class="mt-4 hidden">
-<img id="capturedImage" class="w-full h-48 object-cover rounded-lg mb-2" alt="Captured photo">
-<div class="flex items-center justify-between mb-2">
-<span id="photoTimestamp" class="text-xs text-white/70"></span>
-</div>
-<div class="flex gap-2">
-<button onclick="deletePhoto()" class="flex-1 bg-red-500 text-white py-2 px-4 rounded-button hover:bg-opacity-90 transition-all">
-<i class="ri-delete-bin-line mr-1"></i>Delete
-</button>
-</div>
-</div>
-<!-- Photo Preview Modal -->
-<div id="previewModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-<div class="bg-white rounded-lg p-6 max-w-lg w-full mx-4">
-<h3 class="text-xl font-semibold mb-4 text-gray-800">Photo Preview</h3>
-<img id="modalImage" class="w-full h-64 object-cover rounded-lg mb-4" alt="Preview">
-<div class="flex gap-4">
-<button onclick="retakePhoto()" class="flex-1 bg-gray-500 text-white py-3 px-6 rounded-button hover:bg-opacity-90 transition-all">
-<i class="ri-restart-line mr-1"></i>Retake
-</button>
-<button onclick="confirmPhoto()" class="flex-1 bg-primary text-white py-3 px-6 rounded-button hover:bg-opacity-90 transition-all">
-<i class="ri-check-line mr-1"></i>Confirm
-</button>
-</div>
-</div>
-</div>
-<script>
-document.getElementById('capturePhotoBtn').addEventListener('click', () => {
-if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
-const videoElement = document.createElement('video');
-videoElement.setAttribute('playsinline', '');
-navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
-.then(stream => {
-videoElement.srcObject = stream;
-videoElement.play();
-const canvas = document.createElement('canvas');
-setTimeout(() => {
-canvas.width = videoElement.videoWidth;
-canvas.height = videoElement.videoHeight;
-canvas.getContext('2d').drawImage(videoElement, 0, 0);
-stream.getTracks().forEach(track => track.stop());
-const imageDataUrl = canvas.toDataURL('image/jpeg');
-document.getElementById('modalImage').src = imageDataUrl;
-document.getElementById('previewModal').style.display = 'flex';
-}, 500);
-})
-.catch(error => {
-showNotification('Camera access denied or error occurred');
-});
-} else {
-showNotification('Camera not available on this device');
-}
-});
-function retakePhoto() {
-document.getElementById('previewModal').style.display = 'none';
-document.getElementById('capturePhotoBtn').click();
-}
-function confirmPhoto() {
-const imageDataUrl = document.getElementById('modalImage').src;
-document.getElementById('capturedImage').src = imageDataUrl;
-document.getElementById('photoPreview').classList.remove('hidden');
-document.getElementById('previewModal').style.display = 'none';
-document.getElementById('photoTimestamp').textContent = new Date().toLocaleString();
-// Convert base64 to blob and create file
-fetch(imageDataUrl)
-.then(res => res.blob())
-.then(blob => {
-const file = new File([blob], 'captured-photo.jpg', { type: 'image/jpeg' });
-handleFileUpload([file], 'image');
-});
-}
-function deletePhoto() {
-document.getElementById('photoPreview').classList.add('hidden');
-document.getElementById('capturedImage').src = '';
-}
-</script>
-</div>
-</div>
-<!-- Preview Card -->
-<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-<div class="section-3 text-white rounded-lg shadow-md p-6">
-<div class="flex items-center gap-3 mb-4">
-<div class="w-8 h-8 flex items-center justify-center">
-<i class="ri-bar-chart-box-line text-white text-2xl"></i>
-</div>
-<h2 class="text-xl font-semibold">Ready to Optimize Your Packaging</h2>
-</div>
-<p class="text-white/90">
-Capture a photo of your parts or upload DXF files to get started with AI-powered packaging optimization.
-</p>
-<div class="mt-8 text-center">
-<img src="https://public.readdy.ai/ai/img_res/7c4675cde525245b65ae524f3cc12a9d.jpg"
-alt="Optimization Preview"
-class="mx-auto rounded-lg">
-</div>
-</div>
-<!-- Upload In-house Boxes Card -->
-<div class="bg-gradient-to-br from-emerald-400 to-cyan-400 text-white rounded-lg shadow-md p-6">
-<div class="flex items-center gap-3 mb-4">
-<div class="w-8 h-8 flex items-center justify-center">
-<i class="ri-archive-line text-white text-2xl"></i>
-</div>
-<h2 class="text-xl font-semibold">Upload In-house Boxes</h2>
-</div>
-<p class="text-white/90 mb-4">Upload your in-house packaging specifications</p>
-<div class="upload-zone rounded-lg p-8 text-center relative mb-4">
-<input type="file" class="custom-file-input" accept=".json,.csv,.xlsx" id="boxesUpload">
-<div class="w-12 h-12 mx-auto mb-4 flex items-center justify-center">
-<i class="ri-upload-cloud-2-line text-3xl text-gray-400"></i>
-</div>
-<p class="text-white/90 mb-2">Drag and drop box specification files here</p>
-<p class="text-sm text-white/70">Accepted file types: CSV, Excel spreadsheet, Inventory / Warehouse Management Systems tables and spreadsheets</p>
-</div>
-<button id="uploadBoxesBtn" class="w-full bg-primary text-white py-3 px-6 rounded-button hover:bg-opacity-90 transition-all flex items-center justify-center gap-2">
-<span>Upload Box Specifications</span>
-</button>
-<div id="boxesFilesList" class="mt-4 space-y-2"></div>
-</div>
-</div>
-</main>
-<script>
-// Add to your existing script
-const boxesUpload = document.getElementById('boxesUpload');
-let uploadedBoxFiles = new Set();
-function updateBoxesButton(isLoading = false) {
-const btn = document.getElementById('uploadBoxesBtn');
-if (isLoading) {
-btn.innerHTML = `
-<div class="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full"></div>
-<span>Uploading...</span>
-`;
-btn.disabled = true;
-btn.classList.add('opacity-75');
-} else {
-btn.innerHTML = '<span>Upload Box Specifications</span>';
-btn.disabled = false;
-btn.classList.remove('opacity-75');
-}
-}
-function updateBoxesList() {
-const filesList = document.getElementById('boxesFilesList');
-filesList.innerHTML = Array.from(uploadedBoxFiles).map(file => `
-<div class="flex items-center justify-between bg-white/10 backdrop-blur-sm p-2 rounded">
-<div class="flex items-center gap-2">
-<i class="ri-file-line"></i>
-<div class="flex flex-col">
-<span class="text-sm font-medium">${file.name}</span>
-<span class="text-xs opacity-70">${file.uploadTime}</span>
-</div>
-</div>
-<button onclick="removeBoxFile('${file.name}')" class="text-white hover:text-red-200 p-2">
-<i class="ri-delete-bin-line"></i>
-</button>
-</div>
-`).join('');
-}
-function removeBoxFile(fileName) {
-uploadedBoxFiles = new Set(Array.from(uploadedBoxFiles).filter(file => file.name !== fileName));
-updateBoxesList();
-}
-async function handleBoxFileUpload(files) {
-  updateBoxesButton(true);
-  const file = files[0];
-  if (!file) return;
-  try {
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('fileName', file.name);
-    formData.append('uploadTime', new Date().toLocaleString());
-    const response = await fetch('https://hook.us1.make.com/727pice93yylf3j70efljviowjapa1n4', {
-      method: 'POST',
-      body: formData
-    });
-    if (response.ok) {
-      file.uploadTime = new Date().toLocaleString();
-      uploadedBoxFiles.add(file);
-      updateBoxesList();
-      showNotification('Box specifications uploaded successfully!');
-    } else {
-      showNotification('Upload failed. Please try again.');
-    }
-  } catch (error) {
-    console.error('Upload error:', error);
-    showNotification('An error occurred. Please try again.');
-  } finally {
-    updateBoxesButton(false);
-  }
-}
-boxesUpload.addEventListener('change', (e) => handleBoxFileUpload(e.target.files));
-document.getElementById('uploadBoxesBtn').addEventListener('click', () => {
-document.getElementById('boxesUpload').click();
-});
-</script>
-<footer class="py-8 text-center text-gray-600">
-<p class="mb-2">© 2025 AI Packaging Optimizer | <a href="https://freightmind.link" class="text-primary hover:underline">freightmind.link</a></p>
-<p>Built by NaaTech | <a href="mailto:naatechinc@gmail.com" class="hover:text-primary">naatechinc@gmail.com</a></p>
-</footer>
-<script>
-const dxfUpload = document.getElementById('dxfUpload');
-const imageUpload = document.getElementById('imageUpload');
-let uploadedFiles = new Set();
-function updateUploadButton(isLoading = false) {
-const btn = document.getElementById('uploadDxfBtn');
-if (isLoading) {
-btn.innerHTML = `
-<div class="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full"></div>
-<span>Uploading...</span>
-`;
-btn.disabled = true;
-btn.classList.add('opacity-75');
-} else {
-btn.innerHTML = '<span>Upload DXF Files</span>';
-btn.disabled = false;
-btn.classList.remove('opacity-75');
-}
-}
-function updateFilesList() {
-const filesList = document.getElementById('uploadedFilesList');
-filesList.innerHTML = Array.from(uploadedFiles).map(file => `
-<div class="flex items-center justify-between bg-gray-50 p-2 rounded">
-<div class="flex items-center gap-2">
-<i class="ri-file-line text-gray-600"></i>
-<span class="text-sm text-gray-700">${file.name}</span>
-</div>
-<div class="flex items-center gap-4">
-<span class="text-xs text-gray-500">${new Date().toLocaleString()}</span>
-<button onclick="removeFile('${file.name}')" class="text-red-500 hover:text-red-700">
-<i class="ri-delete-bin-line"></i>
-</button>
-</div>
-</div>
-`).join('');
-}
-function removeFile(fileName) {
-uploadedFiles = new Set(Array.from(uploadedFiles).filter(file => file.name !== fileName));
-updateFilesList();
-}
-async function handleFileUpload(files, type) {
-if (type === 'dxf') {
-updateUploadButton(true);
-}
-if (type === 'dxf') {
-  const reader = new FileReader();
-  const file = files[0];
-  reader.onload = async function () {
-    const base64String = reader.result.split(',')[1]; // Remove data URL prefix
-
-    const payload = {
-      fileBase64: base64String
-    };
-
-    try {
-      const response = await fetch('https://hook.us1.make.com/v7sje53yg84kmw1fr95v3kquf3yh6yr2', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
-      });
-
-      if (response.ok) {
-        showNotification('Base64 DXF uploaded successfully!');
-        file.uploadTime = new Date().toLocaleString();
-        uploadedFiles.add(file);
-        updateFilesList();
-      } else {
-        showNotification('DXF upload failed. Please try again.');
-      }
-    } catch (err) {
-      showNotification('Error uploading DXF file.');
-      console.error(err);
-    } finally {
-      updateUploadButton(false);
-    }
-  };
-  reader.readAsDataURL(file); // Base64 encode
-  return; // Skip remaining logic for DXF
-}
-
-if (type === 'dxf') {
-file.uploadTime = new Date().toLocaleString();
-uploadedFiles.add(file);
-}
-});
-const webhook = type === 'dxf'
-? 'https://hook.us1.make.com/v7sje53yg84kmw1fr95v3kquf3yh6yr2'
-: 'https://hook.us1.make.com/4i1wix9963y98huk6ri8or941jmbfzl2';
-try {
-const response = await fetch(webhook, {
-method: 'POST',
-body: formData
-});
-if (response.ok) {
-showNotification('Files uploaded successfully!');
-if (type === 'dxf') {
-updateFilesList();
-}
-} else {
-showNotification('Upload failed. Please try again.');
-if (type === 'dxf') {
-uploadedFiles.clear();
-updateFilesList();
-}
-}
-} catch (error) {
-showNotification('An error occurred. Please try again.');
-if (type === 'dxf') {
-uploadedFiles.clear();
-updateFilesList();
-}
-} finally {
-if (type === 'dxf') {
-updateUploadButton(false);
-}
-}
-}
-function showNotification(message) {
-const notification = document.createElement('div');
-notification.className = 'fixed top-20 right-4 bg-white shadow-lg rounded-lg p-4 text-gray-800';
-notification.textContent = message;
-document.body.appendChild(notification);
-setTimeout(() => notification.remove(), 3000);
-}
-function openFeedback() {
-document.getElementById('feedbackModal').style.display = 'flex';
-}
-function closeFeedback() {
-document.getElementById('feedbackModal').style.display = 'none';
-document.getElementById('feedbackText').value = '';
-}
-function submitFeedback() {
-const feedback = document.getElementById('feedbackText').value.trim();
-if (!feedback) {
-showNotification('Please enter your feedback');
-return;
-}
-const emailSubject = 'Feedback for AI Packaging Optimizer';
-const emailBody = encodeURIComponent(feedback);
-window.location.href = `mailto:naatechinc@gmail.com?subject=${emailSubject}&body=${emailBody}`;
-closeFeedback();
-}
-dxfUpload.addEventListener('change', (e) => handleFileUpload(e.target.files, 'dxf'));
-imageUpload.addEventListener('change', (e) => handleFileUpload(e.target.files, 'image'));
-document.getElementById('uploadDxfBtn').addEventListener('click', () => {
-document.getElementById('dxfUpload').click();
-});
-// Drag and drop handling
-document.querySelectorAll('.upload-zone').forEach(zone => {
-zone.addEventListener('dragover', (e) => {
-e.preventDefault();
-zone.classList.add('border-primary');
-});
-zone.addEventListener('dragleave', (e) => {
-e.preventDefault();
-zone.classList.remove('border-primary');
-});
-zone.addEventListener('drop', (e) => {
-e.preventDefault();
-zone.classList.remove('border-primary');
-const files = e.dataTransfer.files;
-const type = zone.querySelector('input').accept.includes('dxf') ? 'dxf' : 'image';
-handleFileUpload(files, type);
-});
-});
-</script>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>AI Packaging Optimizer</h1>
+            <p>Optimize your shipping packages with AI-powered arrangement</p>
+        </header>
+        
+        <div class="main-content">
+            <section class="section">
+                <h2 class="section-title">
+                    <span class="box-icon">📦</span> Upload DXF Files
+                </h2>
+                <p class="section-description">Upload file to extract part data</p>
+                
+                <div class="drop-area" id="drop-area">
+                    <p>Drag & drop files here or</p>
+                    <label for="dxf-file-input" class="button">Upload DXF Files</label>
+                    <input type="file" id="dxf-file-input" accept=".dxf" multiple style="display: none;">
+                    <p class="file-info" id="file-info"></p>
+                </div>
+            </section>
+            
+            <section class="section">
+                <h2 class="section-title">
+                    <span class="camera-icon">📸</span> Capture Parts
+                </h2>
+                <p class="section-description">Take a photo to detect parts automatically</p>
+                
+                <div class="drop-area photo-drop-area" id="photo-drop-area">
+                    <p>Drag & drop image here or</p>
+                    <label for="camera-input" class="button button-secondary">Capture Photo</label>
+                    <input type="file" id="camera-input" accept="image/*" capture="environment" style="display: none;">
+                    <p class="file-info" id="photo-info"></p>
+                </div>
+            </section>
+            
+            <section class="section right-section">
+                <div class="box-preview">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" class="box-image">
+                      <!-- Base box - bottom face -->
+                      <polygon points="40,140 160,140 160,180 40,180" fill="#e8c088" stroke="#333" stroke-width="2"/>
+                      
+                      <!-- Box left side -->
+                      <polygon points="40,80 40,180 20,160 20,60" fill="#d4a76a" stroke="#333" stroke-width="2"/>
+                      
+                      <!-- Box right side -->
+                      <polygon points="160,80 160,180 180,160 180,60" fill="#d4a76a" stroke="#333" stroke-width="2"/>
+                      
+                      <!-- Box top - open flaps -->
+                      <polygon points="40,80 20,60 100,40 180,60 160,80" fill="#e8c088" stroke="#333" stroke-width="2"/>
+                      
+                      <!-- Parts inside box -->
+                      <rect x="60" y="100" width="30" height="30" rx="2" fill="#4a86e8" stroke="#333" stroke-width="1"/>
+                      <circle cx="115" cy="115" r="15" fill="#34a853" stroke="#333" stroke-width="1"/>
+                      <polygon points="75,80 105,65 135,80 120,105 90,105" fill="#ff8c00" stroke="#333" stroke-width="1"/>
+                      
+                      <!-- AI element - scanning beam -->
+                      <path d="M100,20 L130,140" stroke="#ff8c00" stroke-width="2" stroke-dasharray="5,3" opacity="0.7"/>
+                      <path d="M70,20 L100,140" stroke="#4a86e8" stroke-width="2" stroke-dasharray="5,3" opacity="0.7"/>
+                      
+                      <!-- AI scanning device on top -->
+                      <rect x="65" y="10" width="70" height="20" rx="5" fill="#333" stroke="#333" stroke-width="1"/>
+                      <circle cx="100" cy="20" r="8" fill="#ff8c00" stroke="#555" stroke-width="1"/>
+                      <circle cx="100" cy="20" r="3" fill="#fff"/>
+                      
+                      <!-- Optimization illustrated with small arrows pointing to arrangement -->
+                      <path d="M50,50 L65,70" stroke="#34a853" stroke-width="2" marker-end="url(#arrow)" stroke-linecap="round"/>
+                      <path d="M150,50 L135,70" stroke="#34a853" stroke-width="2" marker-end="url(#arrow)" stroke-linecap="round"/>
+                      
+                      <!-- Arrow marker definition -->
+                      <defs>
+                        <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                          <path d="M 0 0 L 10 5 L 0 10 z" fill="#34a853"/>
+                        </marker>
+                      </defs>
+                    </svg>
+                </div>
+                <h2>Ready to Optimize Your Packaging</h2>
+                <p>Capture a photo of your parts or upload DXF files to get started with AI-powered packaging optimization.</p>
+            </section>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="#">GitHub</a>
+            <a href="#">Documentation</a>
+            <a href="#">Privacy Policy</a>
+        </div>
+        <p>© 2025 AI Packaging Optimizer</p>
+        <p class="built-by">Built by NaaTech</p>
+        <a href="mailto:NaaTechinc@gmail.com" class="email">NaaTechinc@gmail.com</a>
+    </footer>
 </body>
 </html>
