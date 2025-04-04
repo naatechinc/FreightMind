@@ -238,6 +238,7 @@ class="mx-auto rounded-lg">
 <script>
 const dxfUpload = document.getElementById('dxfUpload');
 const imageUpload = document.getElementById('imageUpload');
+const boxesUpload = document.getElementById('boxesUpload');
 let uploadedFiles = new Set();
 let uploadedBoxFiles = new Set();
 
@@ -352,6 +353,7 @@ function activateCamera() {
       }, 500);
     })
     .catch(error => {
+      console.error('Camera error:', error);
       showNotification('Camera access denied or error occurred');
     });
   } else {
@@ -369,7 +371,12 @@ function openPhotos() {
   
   input.onchange = (e) => {
     if (e.target.files && e.target.files[0]) {
-      handleImageFileUpload([e.target.files[0]]);
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        document.getElementById('modalImage').src = event.target.result;
+        document.getElementById('previewModal').style.display = 'flex';
+      };
+      reader.readAsDataURL(e.target.files[0]);
     }
   };
   
@@ -627,43 +634,11 @@ function handleImageFileUpload(files) {
   const reader = new FileReader();
   
   reader.onload = function(e) {
-    // Display the image preview
-    document.getElementById('capturedImage').src = e.target.result;
-    document.getElementById('photoPreview').classList.remove('hidden');
-    document.getElementById('photoTimestamp').textContent = new Date().toLocaleString();
+    // Show image in preview modal first
+    document.getElementById('modalImage').src = e.target.result;
+    document.getElementById('previewModal').style.display = 'flex';
     
-    // Extract base64 data from the data URL
-    const base64Data = e.target.result.split(',')[1];
-    
-    // Create payload for Make.com webhook
-    const payload = {
-      imageData: base64Data,
-      filename: file.name,
-      fileSize: file.size,
-      fileType: file.type,
-      timestamp: new Date().toISOString(),
-      source: 'file-upload'
-    };
-    
-    // Send to Make.com webhook
-    fetch('https://hook.us1.make.com/4i1wix9963y98huk6ri8or941jmbfzl2', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(payload)
-    })
-    .then(response => {
-      if (response.ok) {
-        showNotification('Image uploaded successfully!');
-      } else {
-        showNotification('Image upload failed. But preview is still available.');
-      }
-    })
-    .catch(error => {
-      console.error('Error uploading image:', error);
-      showNotification('Error uploading image, but preview is still available.');
-    });
+    // Let confirmPhoto handle the rest after user confirms
   };
   
   reader.onerror = function() {
@@ -686,7 +661,7 @@ openPhotoSourceModal();
 
 function showNotification(message) {
 const notification = document.createElement('div');
-notification.className = 'fixed top-20 right-4 bg-white shadow-lg rounded-lg p-4 text-gray-800';
+notification.className = 'fixed top-20 right-4 bg-white shadow-lg rounded-lg p-4 text-gray-800 z-50';
 notification.textContent = message;
 document.body.appendChild(notification);
 setTimeout(() => notification.remove(), 3000);
@@ -726,7 +701,8 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Box specifications upload
   boxesUpload.addEventListener('change', (e) => handleBoxFileUpload(e.target.files));
-  document.getElementById('uploadBoxesBtn').addEventListener('click', () => {document.getElementById('boxesUpload').click();
+  document.getElementById('uploadBoxesBtn').addEventListener('click', () => {
+    document.getElementById('boxesUpload').click();
   });
   
   // Capture photo button - now opens source selection modal
@@ -746,21 +722,20 @@ document.addEventListener('DOMContentLoaded', function() {
     
     zone.addEventListener('dragleave', (e) => {
       e.preventDefault();
-      zone.classList.remove('border-primary');
+      zone.classList.remove('border-primary');zone.classList.remove('border-primary');
     });
     
     zone.addEventListener('drop', (e) => {
       e.preventDefault();
       zone.classList.remove('border-primary');
       const files = e.dataTransfer.files;
-      const type = zone.querySelector('input').accept.includes('dxf') ? 'dxf' : 
-                 zone.querySelector('input').accept.includes('image') ? 'image' : 'box';
+      const inputElement = zone.querySelector('input');
       
-      if (type === 'dxf') {
+      if (inputElement.accept.includes('dxf')) {
         handleFileUpload(files, 'dxf');
-      } else if (type === 'image') {
+      } else if (inputElement.accept.includes('image')) {
         handleImageFileUpload(files);
-      } else {
+      } else if (inputElement.id === 'boxesUpload') {
         handleBoxFileUpload(files);
       }
     });
