@@ -577,26 +577,31 @@ function confirmPhoto() {
   document.getElementById('photoPreview').classList.remove('hidden');
   document.getElementById('previewModal').style.display = 'none';
   document.getElementById('photoTimestamp').textContent = new Date().toLocaleString();
-  
-  // Extract base64 data from the data URL
-  // Data URLs are in the format: data:[<mediatype>][;base64],<data>
-  const base64Data = imageDataUrl.split(',')[1];
-  
-  // Create payload for Make.com webhook
-  const payload = {
-    imageData: base64Data,
-    timestamp: new Date().toISOString(),
-    imageType: 'image/jpeg',
-    source: 'camera'
-  };
-  
-  // Send to Make.com webhook
+
+  // Convert dataURL to Blob
+  function dataURLtoBlob(dataurl) {
+    const arr = dataurl.split(',');
+    const mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while(n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new Blob([u8arr], { type: mime });
+  }
+
+  const blob = dataURLtoBlob(imageDataUrl);
+
+  const formData = new FormData();
+  formData.append("image", blob, "captured-photo.jpg");
+  formData.append("timestamp", new Date().toISOString());
+  formData.append("source", "camera");
+
+  // Send to Make.com as multipart/form-data
   fetch('https://hook.us1.make.com/4i1wix9963y98huk6ri8or941jmbfzl2', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(payload)
+    body: formData
   })
   .then(response => {
     if (response.ok) {
@@ -608,7 +613,6 @@ function confirmPhoto() {
   })
   .then(data => {
     if (data.detectedParts) {
-      // Handle detected parts if returned by the webhook
       console.log('Parts detected by Make.com:', data.detectedParts);
     }
   })
