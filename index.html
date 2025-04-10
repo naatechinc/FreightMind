@@ -453,7 +453,15 @@ async function handleFileUpload(files, type) {
       const arrayBuffer = await readFileAsArrayBuffer(file);
       
       // Convert to base64
-      const base64Data = arrayBufferToBase64(arrayBuffer);
+      // Direct image file upload
+const formData = new FormData();
+formData.append("photo", photoInput.files[0]); // or however your input is set
+
+fetch("https://hook.make.com/your-webhook-url", {
+  method: "POST",
+  body: formData
+});
+
       
       // Add to payload
       payload.files.push({
